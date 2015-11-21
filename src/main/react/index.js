@@ -31,6 +31,11 @@ var App = React.createClass({
           ref='map'
           defaultZoom={3}
           defaultCenter={{lat: -25.363882, lng: 131.044922}}>
+          {this.state.markers.map((marker, index) => {
+            return (
+              <Marker {...marker} />
+            )
+          })}
          </GoogleMap>
       </section>
     );
