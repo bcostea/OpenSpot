@@ -21,7 +21,7 @@
                 setConnected(true);
                 console.log('Connected: ' + frame);
                 stompClient.subscribe('/topic/parkingSpots', function(parkingSpots){
-                    showGreeting(JSON.parse(parkingSpots).content);
+                    showGreeting(JSON.parse(parkingSpots.body));
                 });
             });
         }
@@ -42,7 +42,8 @@
             var response = document.getElementById('response');
             var p = document.createElement('p');
             p.style.wordWrap = 'break-word';
-            p.appendChild(document.createTextNode(parkingSpots));
+            var message = parkingSpots.id + "[ " + parkingSpots.position + "] : " + parkingSpots.status;
+            p.appendChild(document.createTextNode(message));
             response.appendChild(p);
         }
     </script>
