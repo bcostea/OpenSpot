@@ -1,14 +1,17 @@
 package ro.devhacks.terra.model;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 @Document(collection = "parking_spots")
 public class ParkingSpot {
     @Id
+
     private String id;
     private double[] position;
     private ParkingSpotType type = ParkingSpotType.PUBLIC;
@@ -17,9 +20,13 @@ public class ParkingSpot {
     public ParkingSpot() {
     }
 
-    public ParkingSpot(String id, double lat, double lng) {
-        this.id = id;
+    public ParkingSpot(double lat, double lng) {
         this.setPosition(lat, lng);
+    }
+
+    public ParkingSpot(double lat, double lng, ParkingSpotStatus status) {
+        this.setPosition(lat, lng);
+        this.setStatus(status);
     }
 
     public String getId() {

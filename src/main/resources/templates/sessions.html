@@ -56,7 +56,6 @@
                 <input class="form-control" id="whatToPractice" name="whatToPractice"/>
                 <p id="whatToPracticeErrorBlock" class="help-block">The session development practice</p>
             </div>
-            <input id="csrfToken" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <div class="form-group">
                 <input type="button" class="btn btn-primary" value="Add session"
                        id="addButton" onclick="saveSession()"/>
