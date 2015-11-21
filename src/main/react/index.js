@@ -24,6 +24,16 @@ var App = React.createClass({
       }]
     }
   },
+  handleEvent: function () {
+    this.setState();
+
+  },
+  componentDidMount: function () {
+    // Open websocket
+  },
+  componentWillUnmount: function () {
+    // Disconnect websocket
+  },
   render: function () {
     return (
       <section style={mapProps.style}>
@@ -49,5 +59,5 @@ const appStyle = {
 };
 
 setTimeout(function () {
-ReactDOM.render(<App />, document.getElementById('react-container'));
+  ReactDOM.render(<App />, document.getElementById('react-container'));
 }, 500);
