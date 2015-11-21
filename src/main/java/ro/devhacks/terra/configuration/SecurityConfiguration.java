@@ -10,6 +10,10 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebMvcSecurity
@@ -20,24 +24,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+
+        http.csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/login").permitAll()              // everybody can see the login page
-                    .antMatchers("/","/index*","/about*", "/createaccount").permitAll() // everybody can see the landing
-                    .antMatchers("/api/public/**").permitAll()       // allow access to public API
-                    .antMatchers("/admin").hasRole("ADMIN")         // only admins can see the administration area
-                    .anyRequest().authenticated()
+                .antMatchers("/login").permitAll()              // everybody can see the login page
+                .antMatchers("/", "/index*", "/about*", "/createaccount").permitAll() // everybody can see the landing
+                .antMatchers("/api/public/**").permitAll()       // allow access to public API
+                .antMatchers("/admin").hasRole("ADMIN")         // only admins can see the administration area
+                .anyRequest().authenticated()
                 .and()
-                    .formLogin()
-                    .loginPage("/login")
-                    .failureUrl("/login?error")
-                    .usernameParameter("username")
-                    .permitAll()
+                .formLogin()
+                .loginPage("/login")
+                .failureUrl("/login?error")
+                .usernameParameter("username")
+                .permitAll()
                 .and()
-                    .logout()
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) // make /logout accessible with GET
-                    .logoutSuccessUrl("/login?logout")
-                    .permitAll();
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) // make /logout accessible with GET
+                .logoutSuccessUrl("/login?logout")
+                .permitAll();
+
     }
 
     @Override

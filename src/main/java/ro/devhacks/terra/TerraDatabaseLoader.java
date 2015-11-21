@@ -1,6 +1,7 @@
 package ro.devhacks.terra;
 
 import ro.devhacks.terra.model.ParkingSpot;
+import ro.devhacks.terra.model.ParkingSpotStatus;
 import ro.devhacks.terra.model.Role;
 import ro.devhacks.terra.model.User;
 import ro.devhacks.terra.repository.ParkingSpotRepository;
@@ -31,11 +32,11 @@ public class TerraDatabaseLoader {
         User savedUser = createUser("user01", "user@user.com");
         User secondUser = createUser("user02", "user2@user.com");
 
-        parkingSpotRepository.save(new ParkingSpot("bib", 44.426105, 26.109884));
-        parkingSpotRepository.save(new ParkingSpot("pacii", 44.426105, 26.109884));
-        parkingSpotRepository.save(new ParkingSpot("pacii", 44.433849, 26.006355));
-        parkingSpotRepository.save(new ParkingSpot("gorj", 44.433972, 26.014122));
-        parkingSpotRepository.save(new ParkingSpot("timi", 44.433997, 26.020211));
+        parkingSpotRepository.save(new ParkingSpot(44.426105, 26.109884));
+        parkingSpotRepository.save(new ParkingSpot(44.426105, 26.109884, ParkingSpotStatus.OCCUPIED));
+        parkingSpotRepository.save(new ParkingSpot(44.433849, 26.006355));
+        parkingSpotRepository.save(new ParkingSpot(44.433972, 26.014122, ParkingSpotStatus.OCCUPIED));
+        parkingSpotRepository.save(new ParkingSpot(44.433997, 26.020211));
     }
 
     private User createUser(String userName, String email) {
