@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.AdditionalAnswers;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.core.MessageSendingOperations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -51,6 +52,7 @@ public class ParkingSpotSensorAPIControllerIntegrationTest {
                 .then(AdditionalAnswers.returnsFirstArg());
 
         parkingSpotService = new DefaultParkingSpotService(parkingSpotRepository);
+        MessageSendingOperations<String> messagingTemplate = Mockito.mock(MessageSendingOperations.class);
 
         given().standaloneSetup(new ParkingSpotSensorAPIController(parkingSpotService, messagingTemplate)).contentType(ContentType.JSON)
                 .body("{\"id\":\"TEST\", \"free\":true}")
