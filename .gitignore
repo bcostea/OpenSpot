@@ -13,3 +13,5 @@ node_modules
 
 public/js/app.js
 public/css/app.css
+src/main/resources/static/js/
+*js.map
