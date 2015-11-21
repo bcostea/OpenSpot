@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { GoogleMap, Marker } from 'react-google-maps';
 import SockJS from 'sockjs-client';
 import { Stomp } from './stomp.js';
-import { pipe } from 'ramda';
+import { pipe, always } from 'ramda';
 
 const mapProps = {
   style: {
@@ -44,15 +44,8 @@ function makeMarker(item) {
 }
 
 var App = React.createClass({
-  getInitialState: function () {
-    return {
-      markers: []
-    }
-  },
 
-  handleEvent: function () {
-    this.setState();
-  },
+  getInitialState: always({ markers: [] }),
 
   componentDidMount: function () {
     var that = this;
@@ -71,7 +64,6 @@ var App = React.createClass({
             })
             .map(makeMarker);
           markers = markers.concat(that.state.markers);
-          console.log(markers.length);
           that.setState({ markers: markers });
         });
 
