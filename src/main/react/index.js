@@ -99,12 +99,20 @@ var App = React.createClass({
     }
   },
 
+  handleMapClick: function (event) {
+    if (!window.parkingLots) {
+      window.parkingLots = "";
+    }
+    window.parkingLots += 'parkingSpotRepository.save(new ParkingSpot(' + event.latLng.lat() + ', ' + event.latLng.lng() + '))' + "\n";
+  },
+
   render: function () {
     return (
       <section style={mapProps.style}>
         <GoogleMap containerProps={mapProps}
+          onClick={this.handleMapClick}
           ref='map'
-          defaultZoom={10}
+          defaultZoom={18}
           defaultCenter={{lat: this.props.lat, lng: this.props.lng}}>
           {this.state.markers.map((marker, index) => {
             return (
