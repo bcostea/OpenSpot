@@ -16,10 +16,10 @@ const mapProps = {
 function makeMarker (item) {
    return {
      position: {
-       lat: item.position[0] + Math.random() / 5,
-       lng: item.position[1] + Math.random() / 5
+       lat: item.position[0],
+       lng: item.position[1]
      },
-     key: item.id + Math.random(),
+     key: item.id,
      defaultAnimation: 2,
      icon: {
        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
