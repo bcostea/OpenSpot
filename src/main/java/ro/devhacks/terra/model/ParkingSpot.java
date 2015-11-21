@@ -17,7 +17,26 @@ public class ParkingSpot {
     private ParkingSpotType type = ParkingSpotType.PUBLIC;
     private ParkingSpotStatus status = ParkingSpotStatus.FREE;
 
+    private int capacity=1;
+    private int occupied=0;
+
     public ParkingSpot() {
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getOccupied() {
+        return occupied;
+    }
+
+    public void setOccupied(int occupied) {
+        this.occupied = occupied;
     }
 
     public ParkingSpot(double lat, double lng) {

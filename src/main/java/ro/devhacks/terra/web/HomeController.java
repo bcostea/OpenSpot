@@ -1,28 +1,29 @@
 package ro.devhacks.terra.web;
 
-import ro.devhacks.terra.model.AuthenticatedUser;
-import ro.devhacks.terra.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.security.Principal;
+import ro.devhacks.terra.model.Role;
 
 @Controller
 public class HomeController {
 
     @RequestMapping({"/", "/index", "/index.html"})
-    String index( @ModelAttribute("joined") final String joinedMessage, final Model model) {
+    String index(@ModelAttribute("joined") final String joinedMessage, final Model model, Authentication authentication) {
         model.addAttribute("joined", !StringUtils.isEmpty(joinedMessage));
         model.addAttribute("joinMessage", joinedMessage);
+
+        if(authentication!=null) {
+
+            if(authentication.getAuthorities()!=null && authentication.getAuthorities().size()>0 &&
+                    authentication.getAuthorities().toArray()[0].toString().equals(Role.LOT.toString())){
+                return "lot";
+            }
+        }
+
         return "index";
     }
 
