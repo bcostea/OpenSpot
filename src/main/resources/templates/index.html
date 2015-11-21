@@ -4,7 +4,6 @@
       layout:decorator="layout">
 <head>
     <title>Welcome to terra</title>
-    <script language="JavaScript" src="/js/index.js"></script>
 </head>
 <body>
 <section layout:fragment="content">
@@ -37,6 +36,7 @@
 
     <input id="csrfToken" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
+    <script language="JavaScript" src="/js/index.js"></script>
 </section>
 
 </body>

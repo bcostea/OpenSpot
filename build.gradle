@@ -9,6 +9,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE")
         classpath 'de.obqo.gradle:gradle-lesscss-plugin:1.0-1.3.3'
         classpath 'net.eikehirsch.react:gradle-react-plugin:0.3.1'
+        classpath 'com.bluepapa32:gradle-watch-plugin:0.1.5'
     }
 }
 
@@ -16,6 +17,8 @@ apply plugin: 'java'
 apply plugin: 'spring-boot'
 apply plugin: 'lesscss'
 apply plugin: "net.eikehirsch.react"
+apply plugin: 'com.bluepapa32.watch'
+
 
 jar {
     baseName = 'devhacks'
@@ -95,6 +98,13 @@ test {
     testLogging {
         events "failed"
         exceptionFormat "short"
+    }
+}
+
+watch {
+    resources {
+        files fileTree(dir: 'src/main/react')
+        tasks 'jsx'
     }
 }
 
