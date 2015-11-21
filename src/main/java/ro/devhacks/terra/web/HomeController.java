@@ -34,4 +34,7 @@ public class HomeController {
     @RequestMapping("/about")
     String about() { return "about"; }
 
+    @RequestMapping("/api/public/testWebSocket")
+    String testWebSocket() { return "testWebSocket"; }
+
 }
