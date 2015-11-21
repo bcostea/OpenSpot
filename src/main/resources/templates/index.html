@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>Welcome to terra</title>
+    <script language="JavaScript" src="/js/index.js"></script>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="jumbotron">
+        <h1>terra</h1>
+
+        <p>
+            Welcome to terra, let's code together!
+        </p>
+
+        <p>
+            <button class="btn btn-lg btn-primary" onclick="window.location.href = 'sessions.html'">Create a new session</button>
+        </p>
+    </div>
+
+
+    <div th:if="${joined}" class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> <span th:utext="${joinMessage}">You have successfully joined the session</span>
+    </div>
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h2 class="panel-title"><strong>Open pairing sessions</strong></h2>
+        </div>
+        <div id="react-demo-container" class="panel-body">
+
+        </div>
+    </div>
+
+    <input id="csrfToken" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+</section>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <title>terra</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.4/united/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"
+          rel="stylesheet" media="screen" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.4/united/bootstrap.min.css"
+          rel="stylesheet" media="screen" />
+    <link href="../static/css/terra.css"
+          th:href="@{/css/terra.css}"
+          rel="stylesheet" media="screen" />
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.1/jquery.min.js"
+            th:src="@{/webjars/jquery/2.1.1/jquery.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: header"> </div>
+<div class="container">
+    <section layout:fragment="content">
+        <p>Page content goes here</p>
+    </section>
+
+    <footer>
+        <div th:replace="fragments/footer :: footer">&copy; 2015</div>
+    </footer>
+</div>
+</body>
+</html>

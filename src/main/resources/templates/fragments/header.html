@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.2.0/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap.min.css}"
+          rel="stylesheet" media="screen"/>
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.2.0/js/bootstrap.min.js"
+          th:href="@{/webjars/bootstrap/3.2.0/js/bootstrap.min.js}"
+          rel="stylesheet" media="screen"/>
+    <script src="http://cdn.jsdelivr.net/webjars/react/0.14.2/react.min.js"
+            th:src="@{/webjars/react/0.14.2/react.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/react/0.14.2/react-dom.min.js"
+            th:src="@{/webjars/react/0.14.2/react-dom.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/react-bootstrap/0.25.1/react-bootstrap.min.js"
+            th:src="@{/webjars/react/0.14.2/react.min.js}"></script>
+</head>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">terra</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="#" th:href="@{/}">Home</a></li>
+                <li><a href="/about" th:href="@{/about}">About</a></li>
+                <li th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')} : ${false}">
+                    <a th:case="${true}" href="/calendar" tabindex="-1" > My Calendar </a>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')} : ${false}">
+                    <a th:case="${false}" href="/login" tabindex="-1" > Login </a>
+                    <a th:case="${true}" href="/logout" tabindex="-1" >
+                        Logout [<span sec:authentication="name">user</span>]
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

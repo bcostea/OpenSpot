@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+
+<head>
+    <title>Welcome to terra - Session page</title>
+    <script language="JavaScript" src="/webjars/bootstrap-datetimepicker/2.3.1/js/bootstrap-datetimepicker.js"></script>
+    <link href="/webjars/bootstrap-datetimepicker/2.3.1/css/bootstrap-datetimepicker.css" rel="stylesheet" media="screen" />
+    <script language="JavaScript" src="/js/sessions.js"></script>
+</head>
+
+<section layout:fragment="content">
+
+    <div style="margin-top:20px" class="hero-unit">
+        <h1>Manage sessions</h1>
+    </div>
+
+    <div class="panel panel-info" style="margin-top:30px">
+        <div class="panel-heading">
+            <h2 class="panel-title"><strong>Create new session</strong></h2>
+        </div>
+        <div id="manage-sessions-container" class="panel-body">
+            <div class="form-group">
+                <label>Name</label>
+                <input class="form-control" id="sessionName" name="sessionName"/>
+
+                <p id="sessionNameErrorBlock" class="help-block">The name of the pairing session</p>
+            </div>
+            <div class="form-group">
+                <label>When</label>
+                <div class="input-group date" id="datePicker">
+                    <input type="text" class="form-control" id="atTime"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>For how long</label>
+                <input class="form-control" id="sessionDuration" name="sessionDuration"/>
+                <p id="sessionDurationErrorBlock" class="help-block">The session duration</p>
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <input class="form-control" id="sessionLocation" name="sessionLocation"/>
+                <p id="sessionLocationErrorBlock" class="help-block">The session location</p>
+            </div>
+            <div class="form-group">
+                <label>Programming language</label>
+                <input class="form-control" id="sessionProgrammingLanguage" name="sessionProgrammingLanguage"/>
+                <p id="sessionProgrammingLanguageErrorBlock" class="help-block">The session programming language</p>
+            </div>
+            <div class="form-group">
+                <label>What to practice</label>
+                <input class="form-control" id="whatToPractice" name="whatToPractice"/>
+                <p id="whatToPracticeErrorBlock" class="help-block">The session development practice</p>
+            </div>
+            <input id="csrfToken" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" value="Add session"
+                       id="addButton" onclick="saveSession()"/>
+                <input type="reset" class="btn" value="Cancel" onclick="window.location='/' "/>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $('#datePicker').datetimepicker();
+        });
+    </script>
+</section>
+
+</html>

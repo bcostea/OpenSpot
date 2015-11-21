@@ -1,0 +1,31 @@
+server:
+    port: 8080
+spring:
+    profiles.active: development
+---
+spring:
+    profiles: development
+    datasource:
+        driverClassName: org.hsqldb.jdbc.JDBCDriver
+        url: jdbc:hsqldb:mem:terra_dev
+        username: sa
+        password:
+    jpa:
+        open-in-view: true
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+---
+spring:
+    profiles: production
+    datasource:
+        driverClassName: org.postgresql.Driver
+        url: jdbc:postgresql://localhost:5432/terra_prod
+        username: terra
+        password: terra
+    jpa:
+        open-in-view: true
+        show-sql: false
+        hibernate:
+            ddl-auto: update
+            disableConnectionTracking: true

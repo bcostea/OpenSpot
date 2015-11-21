@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>My calendar</title>
+    <script language="JavaScript" src="/js/calendar.js"></script>
+</head>
+<body>
+
+<section layout:fragment="content">
+
+    <h1>Calendar</h1>
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h2 class="panel-title"><strong>All sessions</strong></h2>
+        </div>
+        <div id="sessions-list-container" class="panel-body">
+            <table class="table">
+                <tr>
+                    <th>When</th>
+                    <th>Duration</th>
+                    <th>Location</th>
+                    <th>Programming language</th>
+                    <th>Practice</th>
+                    <th>Owner</th>
+                    <th>Partner</th>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

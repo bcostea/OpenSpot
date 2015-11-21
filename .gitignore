@@ -1,0 +1,15 @@
+.idea/
+*.iml
+build
+out
+gradlew*
+gradle
+.gradle
+.idea
+
+public
+node_modules
+.sass-cache
+
+public/js/app.js
+public/css/app.css
