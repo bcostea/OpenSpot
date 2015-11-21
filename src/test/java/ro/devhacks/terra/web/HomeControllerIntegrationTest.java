@@ -1,6 +1,5 @@
 package ro.devhacks.terra.web;
 
-import ro.devhacks.terra.service.PairingSessionService;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,21 +19,20 @@ import static com.jayway.restassured.RestAssured.when;
 @WebAppConfiguration
 public class HomeControllerIntegrationTest {
 
-    private PairingSessionService pairingSessionService;
 
     @Before
-    public void setUp(){
-        pairingSessionService = Mockito.mock(PairingSessionService.class);
+    public void setUp() {
     }
+
 
     @Test
     public void getHome() throws Exception {
         given()
-            .standaloneSetup(new HomeController(pairingSessionService))
-        .when()
-            .get("/")
-        .then()
-            .statusCode(HttpStatus.OK.value());
+                .standaloneSetup(new HomeController())
+                .when()
+                .get("/")
+                .then()
+                .statusCode(HttpStatus.OK.value());
     }
 
 }

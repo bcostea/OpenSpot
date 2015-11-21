@@ -1,30 +1,28 @@
 package ro.devhacks.terra;
 
-import ro.devhacks.terra.model.PairingSession;
+import ro.devhacks.terra.model.ParkingSpot;
 import ro.devhacks.terra.model.Role;
 import ro.devhacks.terra.model.User;
-import ro.devhacks.terra.repository.PairingSessionRepository;
+import ro.devhacks.terra.repository.ParkingSpotRepository;
 import ro.devhacks.terra.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.util.DateUtils;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 
 @Service
 @Profile("development")
 public class TerraDatabaseLoader {
 
     private final UserRepository userRepository;
-    private final PairingSessionRepository pairingSessionRepository;
+    private final ParkingSpotRepository parkingSpotRepository;
 
     @Autowired
-    public TerraDatabaseLoader(UserRepository userRepository, PairingSessionRepository pairingSessionRepository) {
+    public TerraDatabaseLoader(UserRepository userRepository, ParkingSpotRepository parkingSpotRepository) {
         this.userRepository = userRepository;
-        this.pairingSessionRepository = pairingSessionRepository;
+        this.parkingSpotRepository = parkingSpotRepository;
     }
 
     @PostConstruct
@@ -33,25 +31,11 @@ public class TerraDatabaseLoader {
         User savedUser = createUser("user01", "user@user.com");
         User secondUser = createUser("user02", "user2@user.com");
 
-        PairingSession pairingSessionOne = new PairingSession();
-        pairingSessionOne.setSessionName("Let's code together");
-        pairingSessionOne.setLanguage("Java");
-        pairingSessionOne.setPractice("TDD");
-        pairingSessionOne.setLocation("ITAKE Product Development Room");
-        pairingSessionOne.setAtTime(DateUtils.createNow().getTime());
-        pairingSessionOne.setDuration("1 hour");
-        pairingSessionOne.setCreator(savedUser);
-
-        PairingSession pairingSessionTwo = new PairingSession();
-        pairingSessionTwo.setSessionName("Ruby ninja pairing");
-        pairingSessionTwo.setLanguage("Ruby");
-        pairingSessionTwo.setPractice("Ninja pairing");
-        pairingSessionTwo.setLocation("ITAKE Product Development Room");
-        pairingSessionTwo.setAtTime(DateUtils.createNow().getTime());
-        pairingSessionTwo.setCreator(savedUser);
-        pairingSessionTwo.setDuration("1 hour");
-
-        pairingSessionRepository.save(Arrays.asList(pairingSessionOne,pairingSessionTwo) );
+        parkingSpotRepository.save(new ParkingSpot("bib", 44.426105, 26.109884));
+        parkingSpotRepository.save(new ParkingSpot("pacii", 44.426105, 26.109884));
+        parkingSpotRepository.save(new ParkingSpot("pacii", 44.433849, 26.006355));
+        parkingSpotRepository.save(new ParkingSpot("gorj", 44.433972, 26.014122));
+        parkingSpotRepository.save(new ParkingSpot("timi", 44.433997, 26.020211));
     }
 
     private User createUser(String userName, String email) {
