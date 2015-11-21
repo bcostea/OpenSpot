@@ -1,4 +1,4 @@
 ReactDOM.render(
-  <h1>Hello, world from React!</h1>,
+  React.createElement("h1", null, "Hello, world from React!"),
   document.getElementById('react-demo-container')
 );
