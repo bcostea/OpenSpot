@@ -14,7 +14,7 @@ var defaultConfig = {
     preloaders: [
     ],
     loaders: [
-      { test: /\.js$/, exclude: excludes, loader: "eslint-loader" },
+      //{ test: /\.js$/, exclude: excludes, loader: "eslint-loader" },
       { test: /\.js$/, exclude: excludes, loader: 'babel?presets[]=es2015&presets[]=react' }
     ]
   },
@@ -40,6 +40,7 @@ module.exports = {
       path: path.join(__dirname, './src/main/resources/static/js/'),
       filename: 'index.js'
     },
+    target: 'web',
     module: {
       loaders: [
         { test: /\.css$/, loader: 'style-loader!css-loader!postcss-loader' }

@@ -2,7 +2,10 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {google, GoogleMap, Marker} from 'react-google-maps';
+import { GoogleMap, Marker } from 'react-google-maps';
+
+import SockJS from 'sockjs-client';
+import { Stomp } from './stomp.js';
 
 const mapProps = {
   style: {
@@ -14,33 +17,61 @@ const mapProps = {
 var App = React.createClass({
   getInitialState: function () {
     return {
-      markers: [{
-        position: {
-          lat: 25.0112183,
-          lng: 121.52067570000001,
-        },
-        key: 'Taiwan',
-        defaultAnimation: 2
-      }]
+      markers: []
     }
   },
   handleEvent: function () {
     this.setState();
+  },
+
+  componentDidMount: function () {
+    var that = this;
+    let stompClient = Stomp.over(new SockJS('/api/public/websocket/spots/all'));
+    this.stompClient = stompClient;
+
+    stompClient.connect({}, function(frame) {
+        stompClient.subscribe('/topic/parkingSpots', function(parkingSpots){
+          let markers = JSON.parse(parkingSpots.body)
+          markers = markers.map(function (item) {
+             return {
+               position: {
+                 lat: item.position[0],
+                 lng: item.position[1]
+               },
+               key: item.id,
+               defaultAnimation: 2,
+               icon: {
+                 path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                 fillOpacity: 0.8,
+                 scale: 1,
+                 strokeColor: item.status === 'FREE' ? 'green' : 'red',
+                 strokeWeight: 14
+               }
+             }
+          });
+          that.setState({ markers: markers });
+        });
+
+        setTimeout(function () {
+          stompClient.send("/api/public/websocket/spots/all", {}, JSON.stringify({}));
+        }, 1000);
+    });
 
   },
-  componentDidMount: function () {
-    // Open websocket
-  },
+
   componentWillUnmount: function () {
-    // Disconnect websocket
+    if (this.stompClient !== null) {
+      this.stompClient.disconnect();
+    }
   },
+
   render: function () {
     return (
       <section style={mapProps.style}>
         <GoogleMap containerProps={mapProps}
           ref='map'
-          defaultZoom={3}
-          defaultCenter={{lat: -25.363882, lng: 131.044922}}>
+          defaultZoom={10}
+          defaultCenter={{lat: this.props.lat, lng: this.props.lng}}>
           {this.state.markers.map((marker, index) => {
             return (
               <Marker {...marker} />
@@ -58,6 +89,11 @@ const appStyle = {
   background: 'red'
 };
 
+
+
 setTimeout(function () {
-  ReactDOM.render(<App />, document.getElementById('react-container'));
+    navigator.geolocation.getCurrentPosition(function (position) {
+      ReactDOM.render(<App lat={position.coords.latitude} lng={position.coords.longitude} />, document.getElementById('react-container'));
+      console.log(position);
+    })
 }, 500);
