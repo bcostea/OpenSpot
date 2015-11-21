@@ -16,3 +16,4 @@ public/css/app.css
 src/main/resources/static/js/
 src/main/resources/static/css/
 *js.map
+.module-cache/
