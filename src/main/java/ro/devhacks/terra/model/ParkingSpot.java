@@ -11,6 +11,8 @@ public class ParkingSpot {
     @Id
     private String id;
     private double[] position;
+    private ParkingSpotType type = ParkingSpotType.PUBLIC;
+    private ParkingSpotStatus status = ParkingSpotStatus.FREE;
 
     public ParkingSpot() {
     }
@@ -42,4 +44,19 @@ public class ParkingSpot {
         this.position[1] = lng;
     }
 
+    public ParkingSpotType getType() {
+        return type;
+    }
+
+    public void setType(ParkingSpotType type) {
+        this.type = type;
+    }
+
+    public ParkingSpotStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ParkingSpotStatus status) {
+        this.status = status;
+    }
 }

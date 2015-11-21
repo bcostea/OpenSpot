@@ -5,6 +5,7 @@ import org.springframework.data.geo.Circle;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import ro.devhacks.terra.model.ParkingSpot;
+import ro.devhacks.terra.model.dto.ParkingSpotUpdate;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public interface ParkingSpotService {
     List<ParkingSpot> findByPositionWithin(Box box);
     List<ParkingSpot> findByPositionNear(Point location, Distance distance);
 
+    ParkingSpot updateSpot(ParkingSpotUpdate spotUpdate);
 }
