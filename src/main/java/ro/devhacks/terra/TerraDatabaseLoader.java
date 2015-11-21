@@ -39,19 +39,32 @@ public class TerraDatabaseLoader {
         parkingSpotRepository.save(new ParkingSpot(44.433972, 26.014122, ParkingSpotStatus.OCCUPIED));
         parkingSpotRepository.save(new ParkingSpot(44.433997, 26.020211));
 
-        ParkingSpot interSpot = parkingSpotRepository.save(new ParkingSpot(44.436893, 26.102448));
+        ParkingSpot interSpot1 = parkingSpotRepository.save(new ParkingSpot(44.436813, 26.102418));
+        ParkingSpot interSpot2 = parkingSpotRepository.save(new ParkingSpot(44.436823, 26.102428));
+        ParkingSpot interSpot3 = parkingSpotRepository.save(new ParkingSpot(44.436833, 26.102438));
+        ParkingSpot interSpot4 = parkingSpotRepository.save(new ParkingSpot(44.436843, 26.102448));
+        ParkingSpot interSpot5 = parkingSpotRepository.save(new ParkingSpot(44.436853, 26.102458));
+        ParkingSpot interSpot6 = parkingSpotRepository.save(new ParkingSpot(44.436813, 26.102418));
+        ParkingSpot interSpot7 = parkingSpotRepository.save(new ParkingSpot(44.436823, 26.102428));
+        ParkingSpot interSpot8 = parkingSpotRepository.save(new ParkingSpot(44.436833, 26.102438));
+        ParkingSpot interSpot9 = parkingSpotRepository.save(new ParkingSpot(44.436843, 26.102448));
+        ParkingSpot interSpot10 = parkingSpotRepository.save(new ParkingSpot(44.436853, 26.102458));
 
         Lot lot = new Lot();
         lot.setName("Intercontinental parking");
         lot.setUser(interUser);
-        lot.setParkingSpotId(interSpot.getId());
-
-        interSpot.setCapacity(170);
-        interSpot.setOccupied(27);
-        parkingSpotRepository.save(interSpot);
+        lot.getParkingSpotIds().add(interSpot1.getId());
+        lot.getParkingSpotIds().add(interSpot2.getId());
+        lot.getParkingSpotIds().add(interSpot3.getId());
+        lot.getParkingSpotIds().add(interSpot4.getId());
+        lot.getParkingSpotIds().add(interSpot5.getId());
+        lot.getParkingSpotIds().add(interSpot6.getId());
+        lot.getParkingSpotIds().add(interSpot7.getId());
+        lot.getParkingSpotIds().add(interSpot8.getId());
+        lot.getParkingSpotIds().add(interSpot9.getId());
+        lot.getParkingSpotIds().add(interSpot10.getId());
 
         lotRepository.save(lot);
-
 
     }
 
