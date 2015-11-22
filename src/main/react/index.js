@@ -196,6 +196,7 @@ function move(car, points) {
   carPos = points.shift();
 
   car.setPosition(carPos);
+  map.setCenter(carPos);
   setTimeout(() => {
     move(car, points);
   }, 100);
@@ -289,20 +290,29 @@ function changeLocation(event) {
 function init() {
 
   var $map = $('<div id="map"></div>');
+  var $mapContainer = $('<div></div>');
 
+  $mapContainer.css({
+    width: '100%',
+    height: $(window).height() - $('nav').height(),
+    marginTop: $('nav').height() - 10,
+    overflow: 'hidden'
+  });
+  $mapContainer.append($map);
   $map.css({
     width: '100%',
-    height: 600
+    height: '100%'
   });
-
-  var $closest = $('<button id="closest">Find closest</button>');
-  // $closest.on('click', pipe(always(curLocation), findClosest, traceRouteTo));
-
   var $panel = $('<div id="panel"></div>');
 
-  $('body').append($closest);
-  $('body').append($map);
+  $('body').append($mapContainer);
   $('body').append($panel);
+  $(window).on('resize', function () {
+    $mapContainer.css({
+      height: $(window).height() - $('nav').height() - 10,
+    });
+    google.maps.event.trigger(map, "resize");
+  });
 
   map = new google.maps.Map(document.getElementById('map'), { 
     zoom: 15,
