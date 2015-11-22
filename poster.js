@@ -2,11 +2,14 @@
 var request = require('request');
 
 var spots =
-['5650e704715c84e8b4a547d8',
-'5650e704715c84e8b4a547d9',
-'5650e704715c84e8b4a547da',
-'5650e704715c84e8b4a547db',
-'5650e704715c84e8b4a547dc'];
+["56511e6c715cb5a4b236bc64",
+"56511e6c715cb5a4b236bc65",
+"56511e6c715cb5a4b236bc66",
+"56511e6c715cb5a4b236bc67",
+"56511e6c715cb5a4b236bc68",
+"56511e6c715cb5a4b236bc69",
+"56511e6c715cb5a4b236bc6a",
+"56511e6c715cb5a4b236bc6b"];
 
 var client = function(){
     var spotNum =  Math.floor(Math.random() * 4);
