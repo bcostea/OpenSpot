@@ -35,6 +35,13 @@ const statuses = {
      scale: 1,
      strokeColor: 'red',
      strokeWeight: 14
+   },
+  'TARGET': {
+     path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+     fillOpacity: 0.8,
+     scale: 1,
+     strokeColor: 'yellow',
+     strokeWeight: 14
    }
 }
 
@@ -63,6 +70,7 @@ function recordMarker(event) {
   }
   window.parkingLots += 'parkingSpotRepository.save(new ParkingSpot(' + event.latLng.lat() + ', ' + event.latLng.lng() + '))' + "\n";
 }
+function rad(x) {return x*Math.PI/180;}
 
 function findClosest() {
     var lat = curLocation.lat;
@@ -72,8 +80,9 @@ function findClosest() {
     var closest = -1;
     var i;
     spots.forEach((spot, i) => {
-        var mlat = spot.position.lat;
-        var mlng = spot.position.lng;
+        var mlat = spot.position[0];
+        var mlng = spot.position[1];
+        console.log(lat, lng, mlat, mlng);
         var dLat  = rad(mlat - lat);
         var dLong = rad(mlng - lng);
         var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -85,27 +94,33 @@ function findClosest() {
             closest = i;
         }
     });
-    console.log(closest);
-    return closest;
+
+    return spots[closest];
 }
 
-function traceRoute() {
-  var directionsDisplay = DirectionsRenderer;
-  var directionsService = new google.maps.DirectionsService();
-  var panel = ReactDOM.findDOMNode(this.refs.panel);
+function traceRouteTo(spot) {
+  var directionsDisplay = new google.maps.DirectionsRenderer;
+  var directionsService = new google.maps.DirectionsService;
 
-  directionsDisplay.setMap(this.refs.map);
-  directionsDisplay.setPanel(panel);
+  directionsDisplay.setMap(map);
+  directionsDisplay.setPanel(document.getElementById('panel'));
 
-  var request = {
-    origin: { lat: this.props.lat, lng: this.props.lng },
-    destination: { lat: this.props.lat + 1, lng: this.props.lng },
+  /*
+  var control = document.getElementById('floating-panel');
+  control.style.display = 'block';
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
+  */
+
+  directionsService.route({
+    origin: curLocation,
+    destination: { lat: spot.position[0], lng: spot.position[1] },
     travelMode: google.maps.TravelMode.DRIVING
-  };
-
-  directionsService.route(request, function(response, status) {
-    if (status == google.maps.DirectionsStatus.OK) {
+  }, function(response, status) {
+    console.log('respnse', response);
+    if (status === google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
+    } else {
+      window.alert('Directions request failed due to ' + status);
     }
   });
 }
@@ -134,6 +149,11 @@ function addSpots(rawSpots) {
   spots = spots.concat(newSpots);
 }
 
+function changeLocation(event) {
+  console.log(event);
+  curLocation = { lat: event.latLng.lat(), lng: event.latLng.lng() };
+}
+
 function init() {
 
   var $map = $('<div id="map"></div>');
@@ -144,11 +164,13 @@ function init() {
   });
 
   var $closest = $('<button id="closest">Find closest</button>');
+  $closest.on('click', pipe(findClosest, traceRouteTo));
 
-  $closest.on('click', findClosest);
+  var $panel = $('<div id="panel"></div>');
 
   $('body').append($closest);
   $('body').append($map);
+  $('body').append($panel);
 
   map = new google.maps.Map(document.getElementById('map'), { zoom: 15 });
 
@@ -157,6 +179,8 @@ function init() {
     curLocation.lng = position.coords.longitude;
     setCenter(map, curLocation);
   });
+
+  map.addListener('click', changeLocation);
 
   stomp = Stomp.over(new SockJS('/api/public/websocket/spots/all'));
     stomp.connect({}, function(frame) {
