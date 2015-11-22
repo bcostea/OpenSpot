@@ -20,7 +20,7 @@ public class HomeController {
 
             if(authentication.getAuthorities()!=null && authentication.getAuthorities().size()>0 &&
                     authentication.getAuthorities().toArray()[0].toString().equals(Role.LOT.toString())){
-                return "lot";
+                return "redirect:/lot";
             }
         }
 

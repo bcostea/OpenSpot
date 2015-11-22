@@ -39,6 +39,14 @@ public class TerraDatabaseLoader {
         parkingSpotRepository.save(new ParkingSpot(44.433972, 26.014122, ParkingSpotStatus.OCCUPIED));
         parkingSpotRepository.save(new ParkingSpot(44.433997, 26.020211));
 
+        parkingSpotRepository.save(new ParkingSpot(44.42226417869395, 26.11239105463028));
+        parkingSpotRepository.save(new ParkingSpot(44.43561846512888, 26.049914360046387));
+        parkingSpotRepository.save(new ParkingSpot(44.43555717875888, 26.050536632537842));
+        parkingSpotRepository.save(new ParkingSpot(44.435541857156316, 26.050955057144165));
+        parkingSpotRepository.save(new ParkingSpot(44.435587821951906, 26.05134665966034));
+        parkingSpotRepository.save(new ParkingSpot(44.43549972272858, 26.05194479227066));
+        parkingSpotRepository.save(new ParkingSpot(44.43553228115269, 26.052085608243942));
+
         ParkingSpot interSpot1 = parkingSpotRepository.save(new ParkingSpot(44.436813, 26.102418));
         ParkingSpot interSpot2 = parkingSpotRepository.save(new ParkingSpot(44.436823, 26.102428));
         ParkingSpot interSpot3 = parkingSpotRepository.save(new ParkingSpot(44.436833, 26.102438));
