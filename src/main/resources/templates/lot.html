@@ -1,14 +1,66 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
       layout:decorator="layout">
 <head>
     <title>OpenSpot Lot Management</title>
+    <script>
+        function release(id){
+            $.ajax({
+              type: "POST",
+              url: '/api/public/spots/' + id + '/update',
+              data: "{\"id\":\"" + id + "\", \"free\":true }",
+              success: function(data){
+                location.reload();
+              },
+              contentType: "application/json",
+              dataType: 'json'
+
+            });
+        }
+
+        function occupy(id){
+            $.ajax({
+              type: "POST",
+              url: '/api/public/spots/' + id + '/update',
+              data: "{\"id\":\"" + id + "\", \"free\":false }",
+              success: function(data){
+                 location.reload();
+              },
+              contentType: "application/json",
+              dataType: 'json'
+
+            });
+        }
+
+
+    </script>
 </head>
 <body>
 <section layout:fragment="content">
-    <h1>OpenSpot Lot</h1>
+    <h1 th:text="${lot.name}">OpenSpot Lot</h1>
 
+    <div class="container">
+        <div class="row">
+            <div class="col col-xs-6 col-sm-3" th:each="spot, iterStat  : ${spots}">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="span3" th:inline="text">Spot [[${iterStat.count}]]</div>
+                    </div>
+                    <div class="panel-body">
+                        <div th:class="@{'span3 span-' + ${spot.status}}" th:text="${spot.status}">state</div>
+                    </div>
+                    <div class="panel-footer">
+                        <a th:if="${spot.status.toString()} == 'FREE'"
+                           class="btn btn-danger"
+                           th:onclick="@{'occupy(\'' + ${spot.id} + '\');'}">Occupy</a>
+                        <a th:unless="${spot.status.toString()} == 'FREE'" class="btn btn-success"
+                           th:onclick="@{'release(\'' + ${spot.id} + '\');'}">Release</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 </body>
 </html>

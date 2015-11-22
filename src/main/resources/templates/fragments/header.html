@@ -8,17 +8,17 @@
 </head>
 <body>
 
-<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
-    <div class="container">
+<nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+    <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/">OpenSpot</a>
         </div>
-        <div class="navbar-collapse collapse">
+        <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="#" th:href="@{/}">Home</a></li>
                 <li><a href="/about" th:href="@{/about}">About</a></li>
@@ -37,6 +37,6 @@
             </ul>
         </div>
     </div>
-</div>
+</nav>
 </body>
 </html>
