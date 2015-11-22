@@ -1,7 +1,5 @@
 'use strict';
 
-import React from 'react';
-import ReactDOM from 'react-dom';
 import { GoogleMap, Marker, DirectionsRenderer } from 'react-google-maps';
 import SockJS from 'sockjs-client';
 import { Stomp } from './stomp.js';
@@ -25,16 +23,18 @@ const icons = {
   'FREE': {
      path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
      fillOpacity: 0.8,
-     scale: 1,
+     scale: 5,
      strokeColor: 'green',
-     strokeWeight: 14
+     fillColor: 'green',
+     strokeWeight: 1
    },
    'OCCUPIED': {
      path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
      fillOpacity: 0.8,
-     scale: 1,
+     scale: 5,
      strokeColor: 'red',
-     strokeWeight: 14
+     fillColor: 'red',
+     strokeWeight: 1
    },
   'TARGET': {
      path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
@@ -72,7 +72,7 @@ let newSpot = curry(function (map, item) {
      map: map
   })
 
-  let infowindow = new google.maps.InfoWindow({
+  item.infowindow = new google.maps.InfoWindow({
     content: '<div>Type: ' + item.type + '</div><div>Price: ' + item.price + 'lei/hour</div>'
   })
 
@@ -80,8 +80,8 @@ let newSpot = curry(function (map, item) {
     if (openInfoWindow) {
         openInfoWindow.close()
     }
-    infowindow.open(map, item.marker)
-    openInfoWindow = infowindow
+    item.infowindow.open(map, item.marker)
+    openInfoWindow = item.infowindow
   })
 
   return item;
@@ -138,10 +138,17 @@ function traceRouteTo(points) {
     preserveViewport: true,
     suppressMarkers: true,
     polylineOptions: {
-      strokeWeight: 10,
-      strokeColor: '#660099'
+      strokeWeight: 5,
+      strokeColor: 'green'
     }
   });
+
+  if (openInfoWindow) {
+      openInfoWindow.close()
+  }
+  points.to.infowindow.open(map, points.to.marker);
+
+  openInfoWindow = points.to.infowindow;
 
   directionsService.route({
     origin: points.from,
