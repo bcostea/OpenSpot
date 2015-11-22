@@ -59,17 +59,17 @@ public class TerraDatabaseLoader {
         parkingSpotRepository.save(new ParkingSpot(44.42606276084538, 26.110733449459076));
         parkingSpotRepository.save(new ParkingSpot(44.426122141662866, 26.109682023525238));
 
-        ParkingSpot interSpot1 = parkingSpotRepository.save(new ParkingSpot(44.436913, 26.102418));
-        ParkingSpot interSpot2 = parkingSpotRepository.save(new ParkingSpot(44.436923, 26.102428));
-        ParkingSpot interSpot3 = parkingSpotRepository.save(new ParkingSpot(44.436933, 26.102438));
-        ParkingSpot interSpot4 = parkingSpotRepository.save(new ParkingSpot(44.436943, 26.102448));
-        ParkingSpot interSpot5 = parkingSpotRepository.save(new ParkingSpot(44.436953, 26.102458));
+        ParkingSpot interSpot1 = parkingSpotRepository.save(new ParkingSpot(44.436913, 26.102418, ParkingSpotType.PRIVATE, 6));
+        ParkingSpot interSpot2 = parkingSpotRepository.save(new ParkingSpot(44.436923, 26.102428, ParkingSpotType.PRIVATE, 6));
+        ParkingSpot interSpot3 = parkingSpotRepository.save(new ParkingSpot(44.436933, 26.102438, ParkingSpotType.PRIVATE, 6));
+        ParkingSpot interSpot4 = parkingSpotRepository.save(new ParkingSpot(44.436943, 26.102448, ParkingSpotType.PRIVATE, 6));
+        ParkingSpot interSpot5 = parkingSpotRepository.save(new ParkingSpot(44.436953, 26.102458, ParkingSpotType.PRIVATE, 6));
 
-        ParkingSpot interSpot6 = parkingSpotRepository.save(new ParkingSpot(44.436813, 26.102418));
-        ParkingSpot interSpot7 = parkingSpotRepository.save(new ParkingSpot(44.436823, 26.102428));
-        ParkingSpot interSpot8 = parkingSpotRepository.save(new ParkingSpot(44.436833, 26.102438));
-        ParkingSpot interSpot9 = parkingSpotRepository.save(new ParkingSpot(44.436843, 26.102448));
-        ParkingSpot interSpot10 = parkingSpotRepository.save(new ParkingSpot(44.436853, 26.102458));
+        ParkingSpot interSpot6 = parkingSpotRepository.save(new ParkingSpot(44.436813, 26.102418, ParkingSpotType.PRIVATE, 6));
+        ParkingSpot interSpot7 = parkingSpotRepository.save(new ParkingSpot(44.436823, 26.102428, ParkingSpotType.PRIVATE, 6));
+        ParkingSpot interSpot8 = parkingSpotRepository.save(new ParkingSpot(44.436833, 26.102438, ParkingSpotType.PRIVATE, 6));
+        ParkingSpot interSpot9 = parkingSpotRepository.save(new ParkingSpot(44.436843, 26.102448, ParkingSpotType.PRIVATE, 6));
+        ParkingSpot interSpot10 = parkingSpotRepository.save(new ParkingSpot(44.436853, 26.102458, ParkingSpotType.PRIVATE, 6));
 
         Lot lot = new Lot();
         lot.setName("Intercontinental parking");

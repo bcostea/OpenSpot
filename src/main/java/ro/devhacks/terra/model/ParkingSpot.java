@@ -17,6 +17,15 @@ public class ParkingSpot {
     private double[] position;
     private ParkingSpotType type = ParkingSpotType.PUBLIC;
     private ParkingSpotStatus status = ParkingSpotStatus.FREE;
+    private int price;
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 
     private Date updatedOn = new Date();
 
@@ -38,6 +47,13 @@ public class ParkingSpot {
     public ParkingSpot(double lat, double lng, ParkingSpotStatus status) {
         this.setPosition(lat, lng);
         this.setStatus(status);
+    }
+
+    public ParkingSpot(double lat, double lng, ParkingSpotType type, int price) {
+        this.setPosition(lat, lng);
+        this.setStatus(status);
+        this.setType(type);
+        this.setPrice(price);
     }
 
     public String getId() {
