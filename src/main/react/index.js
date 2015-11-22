@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { GoogleMap, Marker, DirectionsRenderer } from 'react-google-maps';
 import SockJS from 'sockjs-client';
 import { Stomp } from './stomp.js';
-import { pipe, always, prop, curry } from 'ramda';
+import { find, pipe, propEq, always, prop, curry } from 'ramda';
 import $ from 'jquery';
 
 const mapProps = {
@@ -68,7 +68,6 @@ function findClosest() {
   };
 
   directionsService.route(request, function(response, status) {
-    console.log('received', response);
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
     }
@@ -90,14 +89,11 @@ function setCenter(map, point) {
   return map.setCenter({ lat: point.lat, lng: point.lng });
 }
 
-function updateSpot(spot) {
-  console.log(spot);
-  spots.filter(function (x) {
-    if (x.key === spot.id) {
-      x.icon = statuses[rawMarker.status];
-    }
-    return x;
-  });
+function updateSpot(update) {
+  let spot = find(propEq('id', update.id))(spots);
+  if (spot) {
+    spot.marker.setIcon(statuses[update.status]);
+  }
 }
 
 function addSpots(rawSpots) {
