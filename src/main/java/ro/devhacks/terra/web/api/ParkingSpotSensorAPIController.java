@@ -32,12 +32,13 @@ public class ParkingSpotSensorAPIController implements
                            @RequestBody ParkingSpotUpdate spotUpdate) {
         if (spotUpdate.getId() != null && spotUpdate.getId().equals(spotId)) {
             ParkingSpot spot = parkingSpotService.updateSpot(spotUpdate);
-            spot.setUpdatedOn(new Date());
-            this.messagingTemplate.convertAndSend("/topic/spots/update", spot);
-            return spot;
-        } else {
-            return null;
+            if(spot!=null){
+                spot.setUpdatedOn(new Date());
+                this.messagingTemplate.convertAndSend("/topic/spots/update", spot);
+                return spot;
+            }
         }
+        return null;
     }
 
     @Override
