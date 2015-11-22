@@ -33,4 +33,11 @@ public class LotController {
         model.addAttribute("spots", spots);
         return "lot";
     }
+    @RequestMapping("/lotconfig")
+    public String showLotConfig(Principal principal, final Model model){
+        AuthenticatedUser  activeUser = (AuthenticatedUser) ((Authentication) principal).getPrincipal();
+        Lot lot = lotService.getLot(activeUser.getUser());
+        model.addAttribute("lot", lot);
+        return "lotconfig";
+    }
 }

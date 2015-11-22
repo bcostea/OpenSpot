@@ -23,7 +23,7 @@
                 <li><a href="#" th:href="@{/}">Home</a></li>
                 <li><a href="/about" th:href="@{/about}">About</a></li>
                 <li th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')} : ${false}">
-                    <a th:case="${true}" href="/calendar" tabindex="-1" > My Calendar </a>
+                    <a th:case="${true}" href="/lotconfig" tabindex="-1" > Parking lot settings </a>
                 </li>
             </ul>
 
