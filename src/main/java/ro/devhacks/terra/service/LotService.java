@@ -1,8 +1,12 @@
 package ro.devhacks.terra.service;
 
-import org.springframework.stereotype.Service;
+import ro.devhacks.terra.model.Lot;
+import ro.devhacks.terra.model.ParkingSpot;
+import ro.devhacks.terra.model.User;
 
-@Service
-public class LotService {
+import java.util.List;
 
+public interface LotService {
+    Lot getLot(User activeUser);
+    List<ParkingSpot> getSpots(Lot lot);
 }

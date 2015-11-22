@@ -39,11 +39,32 @@ public class TerraDatabaseLoader {
         parkingSpotRepository.save(new ParkingSpot(44.433972, 26.014122, ParkingSpotStatus.OCCUPIED));
         parkingSpotRepository.save(new ParkingSpot(44.433997, 26.020211));
 
-        ParkingSpot interSpot1 = parkingSpotRepository.save(new ParkingSpot(44.436813, 26.102418));
-        ParkingSpot interSpot2 = parkingSpotRepository.save(new ParkingSpot(44.436823, 26.102428));
-        ParkingSpot interSpot3 = parkingSpotRepository.save(new ParkingSpot(44.436833, 26.102438));
-        ParkingSpot interSpot4 = parkingSpotRepository.save(new ParkingSpot(44.436843, 26.102448));
-        ParkingSpot interSpot5 = parkingSpotRepository.save(new ParkingSpot(44.436853, 26.102458));
+        parkingSpotRepository.save(new ParkingSpot(44.42226417869395, 26.11239105463028));
+        parkingSpotRepository.save(new ParkingSpot(44.43561846512888, 26.049914360046387));
+        parkingSpotRepository.save(new ParkingSpot(44.43555717875888, 26.050536632537842));
+        parkingSpotRepository.save(new ParkingSpot(44.435541857156316, 26.050955057144165));
+        parkingSpotRepository.save(new ParkingSpot(44.435587821951906, 26.05134665966034));
+        parkingSpotRepository.save(new ParkingSpot(44.43549972272858, 26.05194479227066));
+        parkingSpotRepository.save(new ParkingSpot(44.43553228115269, 26.052085608243942));
+
+        // Biblioteca
+        parkingSpotRepository.save(new ParkingSpot(44.426097240037066, 26.109960973262787));
+        parkingSpotRepository.save(new ParkingSpot(44.426093409016794, 26.110041439533234));
+        parkingSpotRepository.save(new ParkingSpot(44.426087662485884, 26.11013799905777));
+        parkingSpotRepository.save(new ParkingSpot(44.426087662485884, 26.110256016254425));
+        parkingSpotRepository.save(new ParkingSpot(44.42608383146495, 26.11034721136093));
+        parkingSpotRepository.save(new ParkingSpot(44.42608191595439, 26.110430359840393));
+        parkingSpotRepository.save(new ParkingSpot(44.426078084933096, 26.11051082611084));
+        parkingSpotRepository.save(new ParkingSpot(44.42606850737873, 26.110602021217346));
+        parkingSpotRepository.save(new ParkingSpot(44.42606276084538, 26.110733449459076));
+        parkingSpotRepository.save(new ParkingSpot(44.426122141662866, 26.109682023525238));
+
+        ParkingSpot interSpot1 = parkingSpotRepository.save(new ParkingSpot(44.436913, 26.102418));
+        ParkingSpot interSpot2 = parkingSpotRepository.save(new ParkingSpot(44.436923, 26.102428));
+        ParkingSpot interSpot3 = parkingSpotRepository.save(new ParkingSpot(44.436933, 26.102438));
+        ParkingSpot interSpot4 = parkingSpotRepository.save(new ParkingSpot(44.436943, 26.102448));
+        ParkingSpot interSpot5 = parkingSpotRepository.save(new ParkingSpot(44.436953, 26.102458));
+
         ParkingSpot interSpot6 = parkingSpotRepository.save(new ParkingSpot(44.436813, 26.102418));
         ParkingSpot interSpot7 = parkingSpotRepository.save(new ParkingSpot(44.436823, 26.102428));
         ParkingSpot interSpot8 = parkingSpotRepository.save(new ParkingSpot(44.436833, 26.102438));

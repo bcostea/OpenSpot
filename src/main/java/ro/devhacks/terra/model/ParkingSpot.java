@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 @Document(collection = "parking_spots")
@@ -17,7 +18,17 @@ public class ParkingSpot {
     private ParkingSpotType type = ParkingSpotType.PUBLIC;
     private ParkingSpotStatus status = ParkingSpotStatus.FREE;
 
+    private Date updatedOn = new Date();
+
     public ParkingSpot() {
+    }
+
+    public Date getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public void setUpdatedOn(Date updatedOn) {
+        this.updatedOn = updatedOn;
     }
 
     public ParkingSpot(double lat, double lng) {

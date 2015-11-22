@@ -41,7 +41,10 @@ public class DefaultParkingSpotService implements ParkingSpotService {
     @Override
     public ParkingSpot updateSpot(ParkingSpotUpdate spotUpdate) {
         ParkingSpot spot = parkingSpotRepository.findOne(spotUpdate.getId()) ;
-        spot.setStatus(spotUpdate.getFree() ? ParkingSpotStatus.FREE : ParkingSpotStatus.OCCUPIED);
-        return parkingSpotRepository.save(spot);
+        if(spot!=null) {
+            spot.setStatus(spotUpdate.getFree() ? ParkingSpotStatus.FREE : ParkingSpotStatus.OCCUPIED);
+            return parkingSpotRepository.save(spot);
+        }
+        else return null;
     }
 }
