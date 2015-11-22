@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { GoogleMap, Marker, DirectionsRenderer } from 'react-google-maps';
 import SockJS from 'sockjs-client';
 import { Stomp } from './stomp.js';
-import { find, pipe, propEq, always, prop, curry } from 'ramda';
+import { find, pipe, indexOf, __, propEq, always, prop, curry } from 'ramda';
 import $ from 'jquery';
 
 const mapProps = {
@@ -69,6 +69,7 @@ let newSpot = curry(function (map, item) {
   let infowindow = new google.maps.InfoWindow({
     content: '<div>Type: ' + item.type + '</div><div>Price: ' + item.price + 'lei/hour</div>'
   })
+
   item.marker.addListener('click', function() {
     if (openInfoWindow) {
         openInfoWindow.close()
@@ -76,13 +77,14 @@ let newSpot = curry(function (map, item) {
     infowindow.open(map, item.marker)
     openInfoWindow = infowindow
   })
+
   return item;
 });
 
 let map;
 let curLocation = { lat: 0, lng: 0 };
 let stomp;
-let spots = [];
+window.spots = [];
 
 function recordMarker(event) {
   if (!window.parkingLots) {
@@ -100,9 +102,10 @@ function findClosest(point) {
     var closest = -1;
     var i;
     spots.forEach((spot, i) => {
+        if (spot.status !== 'FREE') return;
+
         var mlat = spot.position[0];
         var mlng = spot.position[1];
-        console.log(lat, lng, mlat, mlng);
         var dLat  = rad(mlat - lat);
         var dLong = rad(mlng - lng);
         var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -115,28 +118,27 @@ function findClosest(point) {
         }
     });
 
-    console.log(closest);
-
-    return spots[closest];
+    return {
+      from: point,
+      to: spots[closest]
+    }
 }
 var directionsDisplay = new google.maps.DirectionsRenderer;
 var directionsService = new google.maps.DirectionsService;
 
-function traceRouteTo(spot) {
-  console.log(spot);
+function traceRouteTo(points) {
   directionsDisplay.setMap(map);
   directionsDisplay.setOptions({
+    preserveViewport: true,
     polylineOptions: {
-      strokeWeight: 30,
+      strokeWeight: 10,
       strokeColor: '#660099'
     }
   });
 
-  directionsDisplay.setPanel(document.getElementById('panel'));
-
   directionsService.route({
-    origin: curLocation,
-    destination: { lat: spot.position[0], lng: spot.position[1] },
+    origin: points.from,
+    destination: { lat: points.to.position[0], lng: points.to.position[1] },
     travelMode: google.maps.TravelMode.DRIVING
   }, function(response, status) {
     if (status === google.maps.DirectionsStatus.OK) {
@@ -153,35 +155,53 @@ function setCenter(map, point) {
 }
 
 function updateSpot(update) {
-  let spot = find(propEq('id', update.id))(spots);
+
+  let spot;
+  spots.forEach((x) => {
+    if (x.id === update.id) {
+      spot = x;
+    }
+  });
   if (spot) {
+    spot.status = update.status;
     spot.marker.setIcon(icons[update.status]);
   }
 }
 
 function addSpots(rawSpots) {
-  let list = spots.map(function (x) {
-    return x.id;
-  });
-  let newSpots = rawSpots
-    .filter(function (x) {
-      return -1 === list.indexOf(x.id);
-    })
-    .map(newSpot(map));
-
-  spots = spots.concat(newSpots);
-  startCar();
+  spots = rawSpots
+    .filter(pipe(prop('id'), indexOf(__, spots.map(prop('id')))))
+    .map(newSpot(map))
+    .concat(spots);
+  return spots;
 }
 
 var start = {
-  lat: 44.425535992887916,
-  lng: 26.127891540527344
+  lat: 44.418854247735524,
+  lng: 26.096949577331543
 };
 
 var stop = {
-  lat: 44.42670062259965,
-  lng: 26.104846000671387
+  lat: 44.42636349533249,
+  lng: 26.11201286315918
 };
+
+let carPos;
+
+function move(car, points) {
+  if (0 === points.length) {
+    return;
+  }
+
+  carPos = points.shift();
+
+  car.setPosition(carPos);
+  setTimeout(() => {
+    move(car, points);
+  }, 3000);
+}
+
+let step = 1 / 1000;
 
 function startCar() {
   directionsService.route({
@@ -196,7 +216,8 @@ function startCar() {
           lng: point.lng()
         };
       });
-      let marker = new google.maps.Marker({
+
+      let car = new google.maps.Marker({
          position: {
            lat: points[0].lat,
            lng: points[0].lng
@@ -204,19 +225,36 @@ function startCar() {
          key: 'car',
          icon: icons['CAR'],
          map: map
-      })
+      });
 
-      let point;
+      let smoothPoints = [];
 
-      setInterval(function () {
-        point = points.shift();
-        if (point) {
-          marker.setPosition(point);
+      function increment(cur, next) {
+        cur = {
+          lat: cur.lat + step,
+          lng: cur.lng + step
         }
-      }, 100);
-      setTimeout(function () {
-        pipe(findClosest, traceRouteTo)(point);
-      }, 500);
+
+        let diffLat = next.lat - cur.lat;
+        let diffLng = next.lng - cur.lng;
+        if (diffLat > step || diffLng > step) {
+          smoothPoints.push(cur);
+          increment(cur, next);
+        }
+      }
+
+      points.forEach((point, index, points) => {
+        smoothPoints.push(point);
+
+        let next = points[index + 1];
+        if (next) {
+          // increment(point, next);
+        }
+      });
+
+      setInterval(() => pipe(findClosest, traceRouteTo)(carPos), 1000);
+      move(car, smoothPoints);
+
     } else {
       window.alert('Directions request failed due to ' + status);
     }
@@ -226,8 +264,8 @@ function startCar() {
 }
 
 function changeLocation(event) {
-  debugger;
-  curLocation = { lat: event.latLng.lat(), lng: event.latLng.lng() };
+  console.log(event.latLng.lat(), event.latLng.lng());
+  // curLocation = { lat: event.latLng.lat(), lng: event.latLng.lng() };
 }
 
 function init() {
@@ -240,7 +278,7 @@ function init() {
   });
 
   var $closest = $('<button id="closest">Find closest</button>');
-  $closest.on('click', pipe(always(curLocation), findClosest, traceRouteTo));
+  // $closest.on('click', pipe(always(curLocation), findClosest, traceRouteTo));
 
   var $panel = $('<div id="panel"></div>');
 
@@ -250,128 +288,7 @@ function init() {
 
   map = new google.maps.Map(document.getElementById('map'), { 
     zoom: 15,
-    styles:[
-    {
-        "featureType": "landscape",
-        "stylers": [
-            {
-                "hue": "#F600FF"
-            },
-            {
-                "saturation": 0
-            },
-            {
-                "lightness": 0
-            },
-            {
-                "gamma": 1
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "stylers": [
-            {
-                "hue": "#DE00FF"
-            },
-            {
-                "saturation": -4.6000000000000085
-            },
-            {
-                "lightness": -1.4210854715202004e-14
-            },
-            {
-                "gamma": 1
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.business",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "stylers": [
-            {
-                "hue": "#FF009A"
-            },
-            {
-                "saturation": 0
-            },
-            {
-                "lightness": 0
-            },
-            {
-                "gamma": 1
-            }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "stylers": [
-            {
-                "hue": "#FF0098"
-            },
-            {
-                "saturation": 0
-            },
-            {
-                "lightness": 0
-            },
-            {
-                "gamma": 1
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "stylers": [
-            {
-                "hue": "#EC00FF"
-            },
-            {
-                "saturation": 72.4
-            },
-            {
-                "lightness": 0
-            },
-            {
-                "gamma": 1
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "stylers": [
-            {
-                "hue": "#7200FF"
-            },
-            {
-                "saturation": 49
-            },
-            {
-                "lightness": 0
-            },
-            {
-                "gamma": 1
-            }
-        ]
-    }
-]
+    styles: require('./mapStyles.js')
   });
 
   navigator.geolocation.getCurrentPosition(function (position) {
@@ -380,12 +297,11 @@ function init() {
     setCenter(map, curLocation);
   });
 
-  map.addListener('click', changeLocation);
-
+  map.addListener('click', recordMarker);
 
   stomp = Stomp.over(new SockJS('/api/public/websocket/spots/all'));
     stomp.connect({}, function(frame) {
-      stomp.subscribe('/topic/parkingSpots', pipe(prop('body'), JSON.parse, addSpots));
+      stomp.subscribe('/topic/parkingSpots', pipe(prop('body'), JSON.parse, pipe(addSpots, startCar)));
       stomp.subscribe('/topic/spots/update', pipe(prop('body'), JSON.parse, updateSpot));
 
       setTimeout(function () {

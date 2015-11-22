@@ -47,5 +47,5 @@ var client = function(){
 }
 
 function startUpdates() {
-  setInterval(client, 100);
+  setInterval(client, 50);
 }
