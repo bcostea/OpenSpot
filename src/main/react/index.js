@@ -38,6 +38,8 @@ const statuses = {
    }
 }
 
+let openInfoWindow;
+
 let newSpot = curry(function (map, item) {
   item.marker = new google.maps.Marker({
      position: {
@@ -48,6 +50,17 @@ let newSpot = curry(function (map, item) {
      defaultAnimation: 2,
      icon: statuses[item.status],
      map: map
+  })
+
+  let infowindow = new google.maps.InfoWindow({
+    content: '<div>Type: ' + item.type + '</div><div>Price: ' + item.price + 'lei/hour</div>'
+  })
+  item.marker.addListener('click', function() {
+    if (openInfoWindow) {
+        openInfoWindow.close()
+    }
+    infowindow.open(map, item.marker)
+    openInfoWindow = infowindow
   })
   return item;
 });
