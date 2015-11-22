@@ -21,7 +21,7 @@ const appStyle = {
 };
 
 
-const statuses = {
+const icons = {
   'FREE': {
      path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
      fillOpacity: 0.8,
@@ -42,6 +42,13 @@ const statuses = {
      scale: 1,
      strokeColor: 'yellow',
      strokeWeight: 14
+   },
+  'CAR': {
+     path: google.maps.SymbolPath.CIRCLE,
+     fillOpacity: 0.8,
+     scale: 3,
+     strokeColor: 'black',
+     strokeWeight: 30
    }
 }
 
@@ -53,7 +60,7 @@ let newSpot = curry(function (map, item) {
      },
      key: item.id,
      defaultAnimation: 2,
-     icon: statuses[item.status],
+     icon: icons[item.status],
      map: map
   })
   return item;
@@ -72,9 +79,9 @@ function recordMarker(event) {
 }
 function rad(x) {return x*Math.PI/180;}
 
-function findClosest() {
-    var lat = curLocation.lat;
-    var lng = curLocation.lng;
+function findClosest(point) {
+    var lat = point.lat;
+    var lng = point.lng;
     var R = 6371; // radius of earth in km
     var distances = [];
     var closest = -1;
@@ -95,29 +102,32 @@ function findClosest() {
         }
     });
 
+    console.log(closest);
+
     return spots[closest];
 }
+var directionsDisplay = new google.maps.DirectionsRenderer;
+var directionsService = new google.maps.DirectionsService;
 
 function traceRouteTo(spot) {
-  var directionsDisplay = new google.maps.DirectionsRenderer;
-  var directionsService = new google.maps.DirectionsService;
-
+  console.log(spot);
   directionsDisplay.setMap(map);
-  directionsDisplay.setPanel(document.getElementById('panel'));
+  directionsDisplay.setOptions({
+    polylineOptions: {
+      strokeWeight: 30,
+      strokeColor: '#660099'
+    }
+  });
 
-  /*
-  var control = document.getElementById('floating-panel');
-  control.style.display = 'block';
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
-  */
+  directionsDisplay.setPanel(document.getElementById('panel'));
 
   directionsService.route({
     origin: curLocation,
     destination: { lat: spot.position[0], lng: spot.position[1] },
     travelMode: google.maps.TravelMode.DRIVING
   }, function(response, status) {
-    console.log('respnse', response);
     if (status === google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(null);
       directionsDisplay.setDirections(response);
     } else {
       window.alert('Directions request failed due to ' + status);
@@ -132,7 +142,7 @@ function setCenter(map, point) {
 function updateSpot(update) {
   let spot = find(propEq('id', update.id))(spots);
   if (spot) {
-    spot.marker.setIcon(statuses[update.status]);
+    spot.marker.setIcon(icons[update.status]);
   }
 }
 
@@ -147,10 +157,63 @@ function addSpots(rawSpots) {
     .map(newSpot(map));
 
   spots = spots.concat(newSpots);
+  startCar();
+}
+
+var start = {
+  lat: 44.425535992887916,
+  lng: 26.127891540527344
+};
+
+var stop = {
+  lat: 44.42670062259965,
+  lng: 26.104846000671387
+};
+
+function startCar() {
+  directionsService.route({
+    origin: start,
+    destination: stop,
+    travelMode: google.maps.TravelMode.DRIVING
+  }, function(response, status) {
+    if (status === google.maps.DirectionsStatus.OK) {
+      let points = response.routes[0].overview_path.map(function (point) {
+        return {
+          lat: point.lat(),
+          lng: point.lng()
+        };
+      });
+      let marker = new google.maps.Marker({
+         position: {
+           lat: points[0].lat,
+           lng: points[0].lng
+         },
+         key: 'car',
+         icon: icons['CAR'],
+         map: map
+      })
+
+      let point;
+
+      setInterval(function () {
+        point = points.shift();
+        if (point) {
+          marker.setPosition(point);
+        }
+      }, 100);
+      setTimeout(function () {
+        pipe(findClosest, traceRouteTo)(point);
+      }, 500);
+    } else {
+      window.alert('Directions request failed due to ' + status);
+    }
+  });
+
+
 }
 
 function changeLocation(event) {
-  console.log(event);
+  debugger;
   curLocation = { lat: event.latLng.lat(), lng: event.latLng.lng() };
 }
 
@@ -160,11 +223,11 @@ function init() {
 
   $map.css({
     width: '100%',
-    height: 500
+    height: 600
   });
 
   var $closest = $('<button id="closest">Find closest</button>');
-  $closest.on('click', pipe(findClosest, traceRouteTo));
+  $closest.on('click', pipe(always(curLocation), findClosest, traceRouteTo));
 
   var $panel = $('<div id="panel"></div>');
 
@@ -172,7 +235,131 @@ function init() {
   $('body').append($map);
   $('body').append($panel);
 
-  map = new google.maps.Map(document.getElementById('map'), { zoom: 15 });
+  map = new google.maps.Map(document.getElementById('map'), { 
+    zoom: 15,
+    styles:[
+    {
+        "featureType": "landscape",
+        "stylers": [
+            {
+                "hue": "#F600FF"
+            },
+            {
+                "saturation": 0
+            },
+            {
+                "lightness": 0
+            },
+            {
+                "gamma": 1
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "stylers": [
+            {
+                "hue": "#DE00FF"
+            },
+            {
+                "saturation": -4.6000000000000085
+            },
+            {
+                "lightness": -1.4210854715202004e-14
+            },
+            {
+                "gamma": 1
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.business",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "stylers": [
+            {
+                "hue": "#FF009A"
+            },
+            {
+                "saturation": 0
+            },
+            {
+                "lightness": 0
+            },
+            {
+                "gamma": 1
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "stylers": [
+            {
+                "hue": "#FF0098"
+            },
+            {
+                "saturation": 0
+            },
+            {
+                "lightness": 0
+            },
+            {
+                "gamma": 1
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "stylers": [
+            {
+                "hue": "#EC00FF"
+            },
+            {
+                "saturation": 72.4
+            },
+            {
+                "lightness": 0
+            },
+            {
+                "gamma": 1
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "stylers": [
+            {
+                "hue": "#7200FF"
+            },
+            {
+                "saturation": 49
+            },
+            {
+                "lightness": 0
+            },
+            {
+                "gamma": 1
+            }
+        ]
+    }
+]
+  });
 
   navigator.geolocation.getCurrentPosition(function (position) {
     curLocation.lat = position.coords.latitude;
@@ -181,6 +368,7 @@ function init() {
   });
 
   map.addListener('click', changeLocation);
+
 
   stomp = Stomp.over(new SockJS('/api/public/websocket/spots/all'));
     stomp.connect({}, function(frame) {
