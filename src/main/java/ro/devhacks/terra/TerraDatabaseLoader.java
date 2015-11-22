@@ -50,7 +50,20 @@ public class TerraDatabaseLoader {
         parkingSpotRepository.save(new ParkingSpot(44.435587821951906, 26.05134665966034));
         parkingSpotRepository.save(new ParkingSpot(44.43549972272858, 26.05194479227066));
         parkingSpotRepository.save(new ParkingSpot(44.43553228115269, 26.052085608243942));
-
+        parkingSpotRepository.save(new ParkingSpot(44.41591158566286, 26.082669496536255));
+        parkingSpotRepository.save(new ParkingSpot(44.417252660963115, 26.086124181747437));
+        parkingSpotRepository.save(new ParkingSpot(44.417444240638126, 26.086843013763428));
+        parkingSpotRepository.save(new ParkingSpot(44.41947494660301, 26.08376383781433));
+        parkingSpotRepository.save(new ParkingSpot(44.41942130622025, 26.088892221450806));
+        parkingSpotRepository.save(new ParkingSpot(44.41935233994155, 26.09029769897461));
+        parkingSpotRepository.save(new ParkingSpot(44.41876995478855, 26.09024405479431));
+        parkingSpotRepository.save(new ParkingSpot(44.422662629558715, 26.088881492614746));
+        parkingSpotRepository.save(new ParkingSpot(44.42185039992162, 26.088227033615112));
+        parkingSpotRepository.save(new ParkingSpot(44.42191936325371, 26.087132692337036));
+        parkingSpotRepository.save(new ParkingSpot(44.4243330286274, 26.093838214874268));
+        parkingSpotRepository.save(new ParkingSpot(44.42282354163813, 26.095576286315918));
+        parkingSpotRepository.save(new ParkingSpot(44.42217989066302, 26.09455704689026));
+        parkingSpotRepository.save(new ParkingSpot(44.421812086924206, 26.097958087921143));
         // Biblioteca
         parkingSpotRepository.save(new ParkingSpot(44.426097240037066, 26.109960973262787));
         parkingSpotRepository.save(new ParkingSpot(44.426093409016794, 26.110041439533234));

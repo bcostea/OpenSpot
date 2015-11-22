@@ -23,7 +23,7 @@ const icons = {
   'FREE': {
      path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
      fillOpacity: 0.8,
-     scale: 5,
+     scale: 7,
      strokeColor: 'green',
      fillColor: 'green',
      strokeWeight: 1
@@ -31,7 +31,7 @@ const icons = {
    'OCCUPIED': {
      path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
      fillOpacity: 0.8,
-     scale: 5,
+     scale: 7,
      strokeColor: 'red',
      fillColor: 'red',
      strokeWeight: 1
@@ -52,9 +52,9 @@ const icons = {
    },
    'CAR': {
      url: 'http://icons.iconarchive.com/icons/fasticon/freestyle/128/car-icon.png',
-     scaledSize: new google.maps.Size(50, 50),
+     scaledSize: new google.maps.Size(60, 60),
      origin: new google.maps.Point(0, 0),
-     anchor: new google.maps.Point(25, 25)
+     anchor: new google.maps.Point(30, 30)
    }
 }
 
@@ -191,8 +191,8 @@ function addSpots(rawSpots) {
 }
 
 var start = {
-  lat: 44.418854247735524,
-  lng: 26.096949577331543
+  lat: 44.417536198659185,
+  lng: 26.081897020339966
 };
 
 var stop = {
