@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { GoogleMap, Marker, DirectionsRenderer } from 'react-google-maps';
 import SockJS from 'sockjs-client';
 import { Stomp } from './stomp.js';
-import { find, pipe, indexOf, __, propEq, always, prop, curry } from 'ramda';
+import { find, pipe, memoize, indexOf, __, propEq, always, prop, curry } from 'ramda';
 import $ from 'jquery';
 
 const mapProps = {
@@ -198,11 +198,16 @@ function move(car, points) {
   car.setPosition(carPos);
   setTimeout(() => {
     move(car, points);
-  }, 3000);
+  }, 100);
 }
 
-let step = 1 / 1000;
+let step = 1 / 10000;
+ var distance = memoize(function(from, to) {
+  if (!to || !from ) return 0; 
+          return Math.abs(Math.sqrt(Math.pow(from.lat - to.lat, 2) + Math.pow(from.lng - to.lng, 2)))
+ });
 
+let smoothPoints = [];
 function startCar() {
   directionsService.route({
     origin: start,
@@ -227,33 +232,46 @@ function startCar() {
          map: map
       });
 
-      let smoothPoints = [];
-
-      function increment(cur, next) {
-        cur = {
-          lat: cur.lat + step,
-          lng: cur.lng + step
-        }
-
-        let diffLat = next.lat - cur.lat;
-        let diffLng = next.lng - cur.lng;
-        if (diffLat > step || diffLng > step) {
-          smoothPoints.push(cur);
-          increment(cur, next);
-        }
-      }
-
-      points.forEach((point, index, points) => {
-        smoothPoints.push(point);
+      let smooth = points.reduce((acc, point, index, points) => {
+        acc.push(point);
 
         let next = points[index + 1];
+
         if (next) {
-          // increment(point, next);
+          let diffLat = next.lat - point.lat;
+          let diffLng = next.lng - point.lng;
+          let dist = distance(point, next);
+
+          let count = dist / step;
+          let inc;
+          let newPoint = {
+            lat: point.lat,
+            lng: point.lng
+          };
+
+          let diffLatStep = diffLat / count;
+          let diffLngStep = diffLng / count;
+
+          for (inc = 0; inc < count; inc += 1) {
+            newPoint = {
+              lat: newPoint.lat + diffLatStep,
+              lng: newPoint.lng + diffLngStep
+            }
+            if (newPoint.lat > next.lat) {
+              newPoint.lat = next.lat;
+            }
+            if (newPoint.lng > next.lng) {
+              newPoint.lng = next.lng;
+            }
+            acc.push(newPoint);
+          }
         }
-      });
+
+        return acc;
+      }, []);
 
       setInterval(() => pipe(findClosest, traceRouteTo)(carPos), 1000);
-      move(car, smoothPoints);
+      move(car, smooth);
 
     } else {
       window.alert('Directions request failed due to ' + status);
