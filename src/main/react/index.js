@@ -14,6 +14,12 @@ const mapProps = {
     width: '100%'
   }
 };
+const appStyle = {
+  width: '500px',
+  height: '300px',
+  background: 'red'
+};
+
 
 const statuses = {
   'FREE': {
@@ -46,6 +52,11 @@ let newSpot = curry(function (map, item) {
   return item;
 });
 
+let map;
+let curLocation = { lat: 0, lng: 0 };
+let stomp;
+let spots = [];
+
 function recordMarker(event) {
   if (!window.parkingLots) {
     window.parkingLots = "";
@@ -73,17 +84,6 @@ function findClosest() {
     }
   });
 }
-
-const appStyle = {
-  width: '500px',
-  height: '300px',
-  background: 'red'
-};
-
-var map;
-var curLocation = { lat: 0, lng: 0 };
-var stomp;
-var spots = [];
 
 function setCenter(map, point) {
   return map.setCenter({ lat: point.lat, lng: point.lng });
@@ -118,6 +118,11 @@ function init() {
     height: 500
   });
 
+  var $closest = $('<button id="closest">Find closest</button>');
+
+  $closest.on('click', findClosest);
+
+  $('body').append($closest);
   $('body').append($map);
 
   map = new google.maps.Map(document.getElementById('map'), { zoom: 15 });
