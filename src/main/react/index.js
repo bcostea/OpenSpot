@@ -43,12 +43,18 @@ const icons = {
      strokeColor: 'yellow',
      strokeWeight: 14
    },
-  'CAR': {
+  'CARS': {
      path: google.maps.SymbolPath.CIRCLE,
      fillOpacity: 0.8,
      scale: 3,
      strokeColor: 'black',
      strokeWeight: 30
+   },
+   'CAR': {
+     url: 'http://icons.iconarchive.com/icons/fasticon/freestyle/128/car-icon.png',
+     scaledSize: new google.maps.Size(50, 50),
+     origin: new google.maps.Point(0, 0),
+     anchor: new google.maps.Point(25, 25)
    }
 }
 
@@ -130,6 +136,7 @@ function traceRouteTo(points) {
   directionsDisplay.setMap(map);
   directionsDisplay.setOptions({
     preserveViewport: true,
+    suppressMarkers: true,
     polylineOptions: {
       strokeWeight: 10,
       strokeColor: '#660099'
@@ -190,6 +197,7 @@ let carPos;
 
 function move(car, points) {
   if (0 === points.length) {
+    clearInterval(carInterval);
     return;
   }
 
@@ -199,16 +207,18 @@ function move(car, points) {
   map.setCenter(carPos);
   setTimeout(() => {
     move(car, points);
-  }, 100);
+  }, 25);
 }
 
-let step = 1 / 10000;
+let step = 1 / 30000;
  var distance = memoize(function(from, to) {
   if (!to || !from ) return 0; 
           return Math.abs(Math.sqrt(Math.pow(from.lat - to.lat, 2) + Math.pow(from.lng - to.lng, 2)))
  });
 
 let smoothPoints = [];
+let carInterval;
+
 function startCar() {
   directionsService.route({
     origin: start,
@@ -271,7 +281,7 @@ function startCar() {
         return acc;
       }, []);
 
-      setInterval(() => pipe(findClosest, traceRouteTo)(carPos), 1000);
+      carInterval = setInterval(() => pipe(findClosest, traceRouteTo)(carPos), 1000);
       move(car, smooth);
 
     } else {
