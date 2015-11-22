@@ -65,6 +65,31 @@ function recordMarker(event) {
 }
 
 function findClosest() {
+    var lat = curLocation.lat;
+    var lng = curLocation.lng;
+    var R = 6371; // radius of earth in km
+    var distances = [];
+    var closest = -1;
+    var i;
+    spots.forEach((spot, i) => {
+        var mlat = spot.position.lat;
+        var mlng = spot.position.lng;
+        var dLat  = rad(mlat - lat);
+        var dLong = rad(mlng - lng);
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(rad(lat)) * Math.cos(rad(lat)) * Math.sin(dLong/2) * Math.sin(dLong/2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = R * c;
+        distances[i] = d;
+        if ( closest == -1 || d < distances[closest] ) {
+            closest = i;
+        }
+    });
+    console.log(closest);
+    return closest;
+}
+
+function traceRoute() {
   var directionsDisplay = DirectionsRenderer;
   var directionsService = new google.maps.DirectionsService();
   var panel = ReactDOM.findDOMNode(this.refs.panel);
